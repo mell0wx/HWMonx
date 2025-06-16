@@ -24,7 +24,6 @@ A clean, modern PowerShell GUI application that displays detailed system hardwar
 | **Motherboard** | Manufacturer, product name, serial number         |
 | **GPU**       | Name, VRAM, driver version, video processor         |
 | **Storage**   | Model, size, interface type, media type             |
-| **PCIe Devices** | Type, vendor, and device name                    |
 
 ---
 
