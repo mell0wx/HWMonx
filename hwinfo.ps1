@@ -10,7 +10,6 @@ function Get-SystemInfo {
         Motherboard= Get-CimInstance Win32_BaseBoard | Select-Object Manufacturer, Product, SerialNumber
         GPU        = Get-CimInstance Win32_VideoController | Select-Object Name, AdapterRAM, DriverVersion, VideoProcessor
         Storage    = Get-CimInstance Win32_DiskDrive | Select-Object Model, InterfaceType, Size, MediaType
-        PCIe       = Get-PnpDevice -Class "PCI" | Where-Object { $_.Status -eq "OK" } | Select-Object Class, FriendlyName, Manufacturer
     }
 }
 
@@ -67,7 +66,7 @@ function New-Window {
 
     $themeToggle.Add_Click({
         $global:darkMode = -not $global:darkMode
-        Set-Theme $window $darkMode
+        Set-Theme $window $global:darkMode
     })
 
     $topPanel = New-Object System.Windows.Controls.StackPanel
@@ -79,12 +78,20 @@ function New-Window {
 
     $dockPanel.Children.Add($tabControl) | Out-Null
     $window.Content = $dockPanel
-
     Set-Theme $window $global:darkMode
-
-    $window.ShowDialog()
+    $window.ShowDialog() | Out-Null
 }
 
+<#
+.SYNOPSIS
+    Applies a light or dark theme to the provided WPF window and its tab controls.
+
+.PARAMETER window
+    The WPF window object to which the theme will be applied.
+
+.PARAMETER dark
+    Boolean flag indicating whether to apply dark mode (if $true) or light mode (if $false).
+#>
 function Set-Theme ($window, $dark) {
     Add-Type -AssemblyName PresentationCore
     if ($dark) {
